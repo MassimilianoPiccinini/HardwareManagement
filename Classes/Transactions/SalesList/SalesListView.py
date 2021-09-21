@@ -69,7 +69,6 @@ class SalesListView(QWidget):
             self.setWindowTitle('Lista Acquisti')
 
     def closeEvent(self, event):
-        # self.controller.save_data()
         event.accept()
 
     def show_selected_info(self):

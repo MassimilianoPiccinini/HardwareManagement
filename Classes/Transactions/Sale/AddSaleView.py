@@ -102,9 +102,7 @@ class AddSaleView(QWidget):
             product = product.split()
             id_product = product[0]
             id_customer = self.user.id_person
-
             my_product = self.products_list_controller.get_product_by_id(id_product)
-
             if date == "" or quantity == "" or id_product == "" or id_customer == "":
                 QMessageBox.critical(self, 'Errore', 'Per favore, inserisci tutte le informazioni richieste',
                                      QMessageBox.Ok, QMessageBox.Ok)

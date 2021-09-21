@@ -100,7 +100,6 @@ class AddOrderView(QWidget):
             supplier = self.supplier.currentText()
             supplier = supplier.split()
             id_supplier = supplier[0]
-
             if date == "" or quantity == "" or id_product == "" or id_supplier == "":
                 QMessageBox.critical(self, 'Errore', 'Per favore, inserisci tutte le informazioni richieste',
                                      QMessageBox.Ok, QMessageBox.Ok)
