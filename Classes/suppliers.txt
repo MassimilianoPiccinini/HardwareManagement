@@ -1,0 +1,1 @@
+[{"id": "1234567", "name": "Hexanon", "description": "Best app ever", "mail": "hexanon@gmail.com", "phone_number": "3312373893", "address": "Via Altotting, 37"}]
