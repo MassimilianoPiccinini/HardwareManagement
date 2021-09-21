@@ -63,7 +63,7 @@ class SalesListView(QWidget):
 
         self.resize(600, 300)
 
-        if is_enabled:
+        if not is_enabled:
             self.setWindowTitle('Lista Vendite')
         else:
             self.setWindowTitle('Lista Acquisti')

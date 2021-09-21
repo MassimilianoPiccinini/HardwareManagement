@@ -91,19 +91,23 @@ class AddOrderView(QWidget):
         now = datetime.now()
         date = now.strftime("%d/%m/%Y")
         quantity = self.quantity.text()
-        # product = self.product.selectedItems()[0].text()
-        product = self.product.currentText()
-        product = product.split()
-        id_product = product[0]
-        # supplier = self.supplier.selectedItems()[0].text()
-        supplier = self.supplier.currentText()
-        supplier = supplier.split()
-        id_supplier = supplier[0]
+        if quantity.isnumeric():
+            # product = self.product.selectedItems()[0].text()
+            product = self.product.currentText()
+            product = product.split()
+            id_product = product[0]
+            # supplier = self.supplier.selectedItems()[0].text()
+            supplier = self.supplier.currentText()
+            supplier = supplier.split()
+            id_supplier = supplier[0]
 
-        if date == "" or quantity == "" or id_product == "" or id_supplier == "":
-            QMessageBox.critical(self, 'Errore', 'Per favore, inserisci tutte le informazioni richieste',
-                                 QMessageBox.Ok, QMessageBox.Ok)
+            if date == "" or quantity == "" or id_product == "" or id_supplier == "":
+                QMessageBox.critical(self, 'Errore', 'Per favore, inserisci tutte le informazioni richieste',
+                                     QMessageBox.Ok, QMessageBox.Ok)
+            else:
+                self.controller.create_order(date, quantity, id_product, id_supplier)
+                self.callback()
+                self.close()
         else:
-            self.controller.create_order(date, quantity, id_product, id_supplier)
-            self.callback()
-            self.close()
+            QMessageBox.critical(self, 'Errore', 'Inserisci una quantità valida',
+                                 QMessageBox.Ok, QMessageBox.Ok)

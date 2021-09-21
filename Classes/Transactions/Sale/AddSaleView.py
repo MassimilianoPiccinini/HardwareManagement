@@ -97,43 +97,50 @@ class AddSaleView(QWidget):
         now = datetime.now()
         date = now.strftime("%d/%m/%Y")
         quantity = self.quantity.text()
-        product = self.product.currentText()
-        product = product.split()
-        id_product = product[0]
-        id_customer = self.user.id_person
+        if quantity.isnumeric():
+            product = self.product.currentText()
+            product = product.split()
+            id_product = product[0]
+            id_customer = self.user.id_person
 
-        my_product = self.products_list_controller.get_product_by_id(id_product)
+            my_product = self.products_list_controller.get_product_by_id(id_product)
 
-        if date == "" or quantity == "" or id_product == "" or id_customer == "":
-            QMessageBox.critical(self, 'Errore', 'Per favore, inserisci tutte le informazioni richieste',
-                                 QMessageBox.Ok, QMessageBox.Ok)
-        elif int(quantity) <= 0:
-            QMessageBox.critical(self, 'Errore', 'La quantità deve essere maggiore di zero (> 0)',
-                                 QMessageBox.Ok, QMessageBox.Ok)
-        elif int(quantity) > int(my_product.quantity):
-            QMessageBox.critical(self, 'Errore', 'Le quantità richieste non sono al momento disponibili',
-                                 QMessageBox.Ok, QMessageBox.Ok)
-        elif self.user.payment_method == 0 and (self.user.credit_card_number == "" or self.user.valid_through == ""
-                                                or self.user.ccv == ""):
-            QMessageBox.critical(self, 'Errore', 'Il metodo di pagamento predefinito (carta di credito) non è stato '
-                                                 'impostato',
-                                 QMessageBox.Ok, QMessageBox.Ok)
-        elif self.user.payment_method == 1 and (self.user.iban == ""):
-            QMessageBox.critical(self, 'Errore', 'Il metodo di pagamento predefinito (conto corrente) non è stato '
-                                             'impostato',
-                             QMessageBox.Ok, QMessageBox.Ok)
+            if date == "" or quantity == "" or id_product == "" or id_customer == "":
+                QMessageBox.critical(self, 'Errore', 'Per favore, inserisci tutte le informazioni richieste',
+                                     QMessageBox.Ok, QMessageBox.Ok)
+            elif int(quantity) <= 0:
+                QMessageBox.critical(self, 'Errore', 'La quantità deve essere maggiore di zero (> 0)',
+                                     QMessageBox.Ok, QMessageBox.Ok)
+            elif int(quantity) > int(my_product.quantity):
+                QMessageBox.critical(self, 'Errore', 'Le quantità richieste non sono al momento disponibili',
+                                     QMessageBox.Ok, QMessageBox.Ok)
+            elif self.user.payment_method == 0 and (self.user.credit_card_number == "" or self.user.valid_through == ""
+                                                    or self.user.ccv == ""):
+                QMessageBox.critical(self, 'Errore',
+                                     'Il metodo di pagamento predefinito (carta di credito) non è stato '
+                                     'impostato',
+                                     QMessageBox.Ok, QMessageBox.Ok)
+            elif self.user.payment_method == 1 and (self.user.iban == ""):
+                QMessageBox.critical(self, 'Errore', 'Il metodo di pagamento predefinito (conto corrente) non è stato '
+                                                     'impostato',
+                                     QMessageBox.Ok, QMessageBox.Ok)
+            else:
+                self.controller.create_sale(date, quantity, id_product, id_customer)
+                self.callback()
+                self.close()
         else:
-            self.controller.create_sale(date, quantity, id_product, id_customer)
-            self.callback()
-            self.close()
+            QMessageBox.critical(self, 'Errore', 'Inserisci una quantità valida',
+                                 QMessageBox.Ok, QMessageBox.Ok)
 
     def on_change_text(self):
-        quantity = 0
-        if self.quantity.text() != "":
-            quantity = int(self.quantity.text())
-        product = self.product.currentText()  # self.product.selectedItems()[0].text()
-        product = product.split()
-        id_product = product[0]
-        my_product = self.products_list_controller.get_product_by_id(id_product)
+        quantity = self.quantity.text()
 
-        self.price.setText('€ ' + str(int(quantity) * int(my_product.price)))
+        if quantity.isnumeric():
+            if self.quantity.text() != "":
+                quantity = int(self.quantity.text())
+            product = self.product.currentText()  # self.product.selectedItems()[0].text()
+            product = product.split()
+            id_product = product[0]
+            my_product = self.products_list_controller.get_product_by_id(id_product)
+
+            self.price.setText('€ ' + str(int(quantity) * int(my_product.price)))
